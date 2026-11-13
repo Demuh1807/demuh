@@ -5,15 +5,15 @@
 /* Reviews use the complete content width, not the three-column tile grid. */
 .reviews-list{display:flex;flex-direction:column;gap:24px;width:100%}
 .review-full{display:grid;grid-template-columns:minmax(0,1fr);width:100%;border:1px solid var(--line);background:#22231e;overflow:hidden}
-.review-full:has(.review-art){grid-template-columns:minmax(180px,30%) minmax(0,1fr)}
-.review-art{width:100%;aspect-ratio:1/1;min-height:0;align-self:start;background:#34372c;overflow:hidden}
+.review-full:has(.review-art){display:flow-root}
+.review-art{width:min(32%,310px);aspect-ratio:1/1;float:left;margin:clamp(22px,3vw,36px) clamp(22px,3vw,36px) 16px clamp(22px,3vw,36px);background:#34372c;overflow:hidden;border:1px solid var(--line)}
 .review-art img{display:block;width:100%;height:100%;aspect-ratio:1/1;object-fit:cover}
-.review-content{padding:clamp(22px,4vw,48px);min-width:0}
+.review-content{padding:clamp(22px,3vw,36px);min-width:0}
 .review-topline{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .review-full h3{font-size:clamp(29px,4vw,48px);line-height:1.12;letter-spacing:-.055em;margin:20px 0 22px;overflow-wrap:anywhere}
 .review-text{font-size:clamp(16px,1.5vw,19px);line-height:1.85;color:#d4d1c5;white-space:pre-wrap;overflow-wrap:anywhere;max-width:80ch}
 .review-link{display:inline-block;margin-top:24px;padding-bottom:5px;border-bottom:1px solid var(--lime);text-decoration:none;font-family:'DM Mono',monospace;font-size:12px}
-@media(max-width:700px){.review-full:has(.review-art){grid-template-columns:1fr}.review-art{height:auto;aspect-ratio:1/1;min-height:0}.review-content{padding:22px}.review-text{font-size:16px}}
+@media(max-width:700px){.review-full:has(.review-art){display:block}.review-art{float:none;width:min(100% - 44px,360px);margin:22px auto 0;aspect-ratio:1/1;min-height:0}.review-content{padding:22px}.review-text{font-size:16px}}
 
 /* MINI GAMES — Schocken */
 .game-shell{border:1px solid var(--line);background:radial-gradient(circle at 85% 0%,#30283e,transparent 52%),#22221f;padding:clamp(20px,4vw,42px);max-width:850px}
@@ -54,6 +54,23 @@
 
 /* V12 — integrated image crop studio */
 .crop-overlay{position:fixed;inset:0;z-index:1000;background:#09090ae8;display:flex;align-items:center;justify-content:center;padding:16px}.crop-dialog{width:min(94vw,590px);max-height:95vh;overflow:auto;background:#25232b;border:1px solid var(--purple);padding:22px;box-shadow:0 24px 80px #0009}.crop-dialog h3{font-size:27px;margin:4px 0 10px;letter-spacing:-.04em}.crop-stage{width:min(100%,430px);aspect-ratio:1;margin:18px auto;background:#121114;overflow:hidden;touch-action:none;cursor:grab;border:2px solid var(--lime);position:relative}.crop-stage:active{cursor:grabbing}.crop-stage canvas{width:100%;height:100%;display:block}.crop-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.crop-controls input{flex:1;min-width:150px;accent-color:var(--purple)}.crop-buttons{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px}.crop-preview{display:flex;align-items:center;gap:12px;margin-top:10px}.crop-preview img{height:66px;width:66px;object-fit:cover;border:1px solid var(--purple)}.crop-hint{color:#bdb8c7;font-size:13px;line-height:1.5}
+
+/* V15: article image integrates into text, two-person dice table */
+.review-full::after{content:"";display:block;clear:both}
+.game-mode{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 18px}
+.game-mode button{background:transparent;border:1px solid var(--line);color:var(--paper);padding:12px 18px;font:12px 'DM Mono',monospace}
+.game-mode button.selected{background:var(--purple);border-color:var(--purple);color:white}
+.dice-boards{display:grid;grid-template-columns:1fr;gap:18px}
+.dice-boards.two-players{grid-template-columns:repeat(2,minmax(0,1fr))}
+.two-players .game-shell{padding:clamp(14px,2vw,25px);min-width:0}
+.two-players .game-shell h3{font-size:clamp(26px,3vw,43px)}
+.two-players .dice-tray{gap:clamp(5px,1vw,14px);padding:22px 5px;min-height:140px}
+.two-players .die-face{width:clamp(55px,7vw,84px);height:clamp(55px,7vw,84px);padding:8px;gap:3px;border-width:3px}
+.two-players .pip{width:clamp(7px,1vw,12px);height:clamp(7px,1vw,12px)}
+.two-players .die-button{font-size:9px;gap:8px}
+.two-players .game-actions{gap:8px}.two-players .game-actions button{padding:10px;font-size:11px}
+.two-players .game-result.in-tray .final-name{font-size:clamp(28px,4vw,48px)}
+@media(max-width:700px){.dice-boards.two-players{grid-template-columns:1fr}.review-art{float:none;width:min(calc(100% - 44px),360px);margin:22px auto 0}}
 </style></head><body><header><div><div class="brand">DEMUH<span>✳</span> SANDBOX</div><div class="micro">A PERSONAL INTERNET CORNER / EST. 2026</div></div><button class="ghost micro" id="adminToggle">✳ EDIT MODE</button></header><nav class="nav" id="nav"></nav><main id="main"></main><footer class="footer">MADE WITH CURIOSITY · NO ALGORITHM, JUST TASTE · © DEMUH</footer><div id="toast" class="toast hidden"></div><div id="cropRoot"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script>
 const SUPABASE_URL='https://fqjkbnjkqrydzbgdvijc.supabase.co';
 const SUPABASE_KEY='sb_publishable_Ab4Hf5YC6juSTG_JpF0z1Q_sFLEpVHU';
@@ -81,65 +98,57 @@ function currentPick(kind){return items.filter(x=>x.entryType==='reviews'&&(x.ki
 function nowPanel(kind,label,emoji,category){const x=currentPick(kind);return `<div class="now-card"><span class="tag">${emoji} ${label}</span>${x?`<div class="now-card-content">${x.image?`<img src="${esc(x.image)}" alt="" loading="lazy">`:''}<div><strong>${esc(x.title)}</strong>${x.date?`<span class="micro">${esc(x.date)}</span>`:''}${x.body?`<p>${esc(x.body)}</p>`:''}<button class="now-link" data-jump="${esc(x.id)}">MEHR ANSEHEN ↗</button></div></div>`:`<p class="note">Noch kein Eintrag. Im Editor direkt „${label}“ auswählen.</p>`}</div>`}
 function wallListing(){const a=items.filter(x=>x.category==='Aktuelles'&&(x.kind||'').toUpperCase()==='WALL NOTE').slice().reverse();return a.length?`<div class="wall-grid">${a.map(x=>`<article class="wall-note" data-entry-id="${esc(x.id)}"><span class="tag">✳ PINNED THOUGHT</span>${x.image?`<img src="${esc(x.image)}" alt="" loading="lazy">`:''}<p>${esc(x.body)}</p>${x.date?`<small class="micro">${esc(x.date)}</small>`:''}</article>`).join('')}</div>`:'<div class="empty">Die Pinnwand ist noch leer. Der erste Gedanke wartet auf seinen Platz.</div>'}
 function randomDiscovery(){const pool=items.filter(x=>x.title&&((x.entryType==='reviews'&&!['NOW PLAYING','NOW READING'].includes((x.kind||'').toUpperCase()))||x.entryType==='favorites'));if(!pool.length){flash('Noch keine Einträge zum Entdecken.');return}const x=pool[Math.floor(Math.random()*pool.length)];page=(x.kind||'').toUpperCase()==='WALL NOTE'?'Pensamientos':x.category;subtab=x.entryType==='reviews'?'reviews':(x.category==='Musik'?x.favoriteGroup:'favorites');render();window.scrollTo(0,0);setTimeout(()=>{const target=[...document.querySelectorAll('[data-entry-id]')].find(e=>e.dataset.entryId===String(x.id));target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('random-highlight');setTimeout(()=>target?.classList.remove('random-highlight'),2200)},100)}
+let diceMode='solo';
+const dicePlayers=[makeDicePlayer(),makeDicePlayer()];
+function makeDicePlayer(){return {values:[1,1,1],held:[false,false,false],rolls:0,covered:false,finished:false,sixTurns:0,sixLimit:0,lastFreshSixes:0}}
+function diceBoardHTML(n){return `<section class="game-shell player-board"><div class="game-heading"><div><span class="game-label">DICE CLUB / SPIELER ${n}</span><h3>SCHOCKEN 🎲</h3></div><span class="game-label">3 WÜRFEL · 3 WÜRFE</span></div><p class="game-description">Erst den Becher schütteln, dann aufdecken. Halte nach dem Aufdecken einzelne Würfel fest und würfle die übrigen erneut. Maximal drei Würfe – ganz wie am Tisch.</p><div class="dice-tray" data-role="diceTray"></div><div class="six-rule" data-role="sixRule"></div><div class="game-actions"><button class="action" data-role="rollDice">▣ BECHER SCHÜTTELN</button><button class="ghost" data-role="finishDice" type="button">ERGEBNIS WERTEN</button><button class="ghost" data-role="resetDice">NEUE RUNDE ↻</button><span class="micro" data-role="rollCount">WURF 0 / 3</span></div><div class="dice-cup-label" data-role="cupLabel">DER BECHER IST BEREIT</div><div class="game-result waiting" data-role="diceResult" aria-live="polite">Schüttel den Becher, um deinen ersten Wurf zu starten.</div><p class="game-foot">HAUSREGELN: Nur 1–2–3 und 4–5–6 sind Straßen. Zwei Sechsen erlauben eine 6→1; drei Sechsen in einem einzigen Wurf erlauben zwei 6→1.</p></section>`}
 function render(){ $('#nav').innerHTML=sections.map(s=>`<button data-page="${s}" class="${page===s?'active':''}">${s}</button>`).join('');$('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{page=b.dataset.page;subtab=page==='Musik'?'Künstler':'favorites';favoriteGroup='Künstler';render();window.scrollTo(0,0)});let h='';if(page==='Aktuelles'){const recent=recentPosts();const newest=recent[0];const music=items.filter(x=>x.category==='Musik'&&x.entryType==='favorites'&&x.favoriteGroup==='Künstler').sort((a,b)=>(a.rank||99)-(b.rank||99));h=`<section class="home-hero"><div class="home-hero-main"><div class="eyebrow">✳ ISSUE 001 / PERSONAL INTERNET ARCHIVE / EST. 2026</div><h1>DEMUH'S<br><em>SANDBOX.</em></h1><p>Ein ziemlich subjektives Archiv über Musik, Filme, Bücher und alles, was dazwischen passiert. Kein Algorithmus. Nur Geschmack.</p><div class="home-hero-links"><button data-go="Musik">♫ MUSIC CORNER ↗</button><button data-go="Minispiele">♠ PLAYGROUND ↗</button></div></div><div class="home-hero-aside"><div class="home-orbit">✳</div><span>CURATED WITH CURIOSITY</span><strong>Yessirski<br>Slime</strong><small>VOL. 01 — ALWAYS IN PROGRESS</small></div></section><div class="home-marquee"><span>NOW PLAYING: LIFE ✳</span><span>FILMS / BOOKS / MUSIC / MORE</span><span>INDEPENDENTLY CURATED SINCE 2026</span></div><div class="section-head"><h2>FRESHLY POSTED <span class="home-arrow">↘</span></h2><small>THE LATEST FROM THE ARCHIVE</small></div>${newest?`<div class="home-feature"><div class="home-feature-art">${newest.image?`<img src="${esc(newest.image)}" alt="" loading="lazy">`:`<span>${icon[newest.category]||'✳'}</span>`}</div><div class="home-feature-copy"><span class="tag">LATEST DROP / ${esc(newest.category)}</span><h3>${esc(newest.title)}</h3><p>${esc((newest.body||'').slice(0,260))}${(newest.body||'').length>260?' …':''}</p><button data-go="${esc(newest.category)}">ZUM BEITRAG ↗</button></div></div>${recent.length>1?`<div class="home-post-grid">${recent.slice(1,5).map(homeCard).join('')}</div>`:''}`:'<div class="empty">Noch keine Beiträge veröffentlicht. Der nächste Review bekommt hier seinen großen Auftritt.</div>'}<div class="section-head"><h2>CURRENTLY INTO ↘</h2><small>A LITTLE LIFE UPDATE</small></div><div class="now-grid">${nowPanel('NOW PLAYING','NOW PLAYING','♫','Musik')}${nowPanel('NOW READING','NOW READING','✳','Bücher')}</div><div class="random-strip"><div><span class="tag">✳ INTERNET ROULETTE</span><h3>FIND SOMETHING RANDOM.</h3><p>Ein zufälliger Fund aus meinem Archiv. Keine Empfehlung vom Algorithmus.</p></div><button id="randomFind">SURPRISE ME ↗</button></div><div class="home-bottom"><section><div class="section-head"><h2>ON REPEAT ↗</h2><small>TOP ARTISTS</small></div>${favoriteListing(music.slice(0,3))}<button class="home-text-link" data-go="Musik">ALLE MUSIK-FAVORITEN ↗</button></section><section><div class="section-head"><h2>EXPLORE THE ARCHIVE ✳</h2><small>TAKE A LOOK AROUND</small></div><div class="home-directory"><button data-go="Filme"><span>01</span><strong>FILME</strong><b>↗</b></button><button data-go="Bücher"><span>02</span><strong>BÜCHER</strong><b>↗</b></button><button data-go="Vlogs"><span>03</span><strong>VLOGS</strong><b>↗</b></button><button data-go="Minispiele"><span>04</span><strong>MINISPIELE</strong><b>↗</b></button><button data-go="Pensamientos"><span>05</span><strong>PENSAMIENTOS</strong><b>↗</b></button></div></section></div>`}
-else if(page==='Minispiele'){h=`<div class="section-head"><h2>♠ MINISPIELE</h2><small>THE PLAYGROUND</small></div><section class="game-shell"><div class="game-heading"><div><span class="game-label">GAME NO. 001 / DICE CLUB</span><h3>SCHOCKEN 🎲</h3></div><span class="game-label">3 WÜRFEL · 3 WÜRFE</span></div><p class="game-description">Erst den Becher schütteln, dann aufdecken. Halte nach dem Aufdecken einzelne Würfel fest und würfle die übrigen erneut. Maximal drei Würfe – ganz wie am Tisch.</p><div class="dice-tray" id="diceTray"></div><div class="six-rule" id="sixRule"></div><div class="game-actions"><button class="action" id="rollDice">▣ BECHER SCHÜTTELN</button><button class="ghost" id="finishDice" type="button">ERGEBNIS WERTEN</button><button class="ghost" id="resetDice">NEUE RUNDE ↻</button><span class="micro" id="rollCount">WURF 0 / 3</span></div><div class="dice-cup-label" id="cupLabel">DER BECHER IST BEREIT</div><div class="game-result waiting" id="diceResult" aria-live="polite">Schüttel den Becher, um deinen ersten Wurf zu starten.</div><p class="game-foot">HAUSREGELN: Nur 1–2–3 und 4–5–6 sind Straßen. Zwei Sechsen erlauben eine 6→1; drei Sechsen in einem einzigen Wurf erlauben zwei 6→1.</p></section>`}
-else if(page==='Pensamientos'){h=`<div class="section-head"><h2>✎ PENSAMIENTOS</h2><small>THOUGHTS / PHOTOS / WHATEVER</small></div><p class="game-description">Eine digitale Pinnwand für alles, was sonst nirgendwo reinpasst. Kleine Gedanken, Fundstücke und Momentaufnahmen.</p>${wallListing()}`}
+else if(page==='Minispiele'){h=`<div class="section-head"><h2>♠ MINISPIELE</h2><small>THE PLAYGROUND</small></div><div class="game-mode"><span class="game-label">SPIELMODUS</span><button type="button" data-dice-mode="solo" class="${diceMode==='solo'?'selected':''}">◉ ALLEINE</button><button type="button" data-dice-mode="duo" class="${diceMode==='duo'?'selected':''}">◉ ZU ZWEIT</button></div><p class="game-description">${diceMode==='duo'?'Zwei unabhängige Würfelfelder. Leg das iPad zwischen euch oder spielt nebeneinander. Jeder hat seinen eigenen Becher und drei Würfe.':'Schütteln, aufdecken und Würfel festhalten – wie am echten Tisch.'}</p><div class="dice-boards ${diceMode==='duo'?'two-players':''}">${diceBoardHTML(1)}${diceMode==='duo'?diceBoardHTML(2):''}</div>`}
+
 else if(page==='Über mich'){h=`<div class="feature"><div><div class="eyebrow">ABOUT THIS LITTLE CORNER</div><h2>HELLO,<br>INTERNET.</h2><p>Willkommen in meiner Sandbox. Hier sammle ich meine aktuellen Lieblingskünstler, Filme, Bücher und alles, was mir sonst so einfällt.</p><p>Keine perfekte Bestenliste, sondern eine Momentaufnahme. Die Dinge ändern sich. Die Seite auch.</p></div><div class="stamp">☺</div></div><div class="section-head"><h2>NOTES & THOUGHTS</h2></div>${listing(items.filter(x=>x.category===page))}`}
 else{const hasTabs=['Musik','Filme','Bücher'].includes(page);const isMusic=page==='Musik';const showingReviews=subtab==='reviews';const a=items.filter(x=>x.category===page&&(!hasTabs||(showingReviews?x.entryType==='reviews':x.entryType==='favorites'&&(!isMusic||x.favoriteGroup===subtab)))).sort((a,b)=>hasTabs&&showingReviews?String(b.date||'').localeCompare(String(a.date||'')):(a.rank||999)-(b.rank||999));h=`<div class="section-head"><h2>${icon[page]} ${page.toUpperCase()}</h2><small>CURATED BY DEMUH</small></div>${hasTabs?`<div class="subnav">${isMusic?musicGroups.map(g=>`<button data-tab="${g}" class="${subtab===g?'active':''}">★ ${g.toUpperCase()}</button>`).join(''):`<button data-tab="favorites" class="${subtab==='favorites'?'active':''}">★ FAVORITES</button>`}<button data-tab="reviews" class="${subtab==='reviews'?'active':''}">✎ REVIEWS / ARTIKEL</button></div>`:''}${hasTabs?(showingReviews?reviewListing(a):favoriteListing(a)):(page==='Vlogs'?reviewListing(a):listing(a))}`}
 $('#main').innerHTML=(loadError?`<div class="empty">Datenbankfehler: ${esc(loadError)}</div>`:'')+h+(admin&&loggedIn?adminHTML():'')+(admin&&!loggedIn?loginHTML():'');document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{subtab=b.dataset.tab;render()});document.querySelectorAll('[data-go],[data-open-category]').forEach(b=>b.onclick=()=>{page=b.dataset.go||b.dataset.openCategory;subtab=page==='Musik'?'reviews':(['Filme','Bücher'].includes(page)?'reviews':'favorites');render();window.scrollTo(0,0)});if(page==='Minispiele')wireDice();document.querySelector('#randomFind')?.addEventListener('click',randomDiscovery);document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{const x=items.find(i=>String(i.id)===b.dataset.jump);if(!x)return;page=x.category;subtab='reviews';render();setTimeout(()=>[...document.querySelectorAll('[data-entry-id]')].find(e=>e.dataset.entryId===String(x.id))?.scrollIntoView({behavior:'smooth',block:'center'}),50)});if(admin&&loggedIn)wireAdmin();if(admin&&!loggedIn)wireLogin()}
 function dicePips(value){const positions={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};return Array.from({length:9},(_,i)=>positions[value].includes(i)?'<span class="pip"></span>':'<span></span>').join('')}
-function diceOutcome(){
- const a=[...diceValues].sort((x,y)=>x-y), desc=[...a].reverse().join(' – ');
- if(a.join('')==='111')return {name:'SCHOCK AUS!',desc:'1 – 1 – 1',detail:'Der höchste Schock. Besser geht es nicht.',type:'schock'};
- if(a[0]===1&&a[1]===1)return {name:`SCHOCK ${a[2]}`,desc:`1 – 1 – ${a[2]}`,detail:'Zwei Einsen und ein weiterer Würfel.',type:'schock'};
- if(a[0]===a[2])return {name:`GENERAL ${a[0]}`,desc:`${a[0]} – ${a[1]} – ${a[2]}`,detail:'Drei gleiche Zahlen.',type:'general'};
- if(['123','456'].includes(a.join('')))return {name:'STRASSE',desc:a.join(' – '),detail:'Eine der beiden Straßen: 1–2–3 oder 4–5–6.',type:'strasse'};
- return {name:'ZAHLENWURF',desc,detail:'Kein Schock, General oder Straße – dein Zahlenwurf zählt.',type:'zahl'};
+function diceOutcome(values){
+ const a=[...values].sort((x,y)=>x-y),desc=[...a].reverse().join(' – ');
+ if(a.join('')==='111')return {name:'SCHOCK AUS!',desc:'1 – 1 – 1',detail:'Der höchste Schock. Besser geht es nicht.'};
+ if(a[0]===1&&a[1]===1)return {name:`SCHOCK ${a[2]}`,desc:`1 – 1 – ${a[2]}`,detail:'Zwei Einsen und ein weiterer Würfel.'};
+ if(a[0]===a[2])return {name:`GENERAL ${a[0]}`,desc:a.join(' – '),detail:'Drei gleiche Zahlen.'};
+ if(['123','456'].includes(a.join('')))return {name:'STRASSE',desc:a.join(' – '),detail:'Eine der beiden Straßen: 1–2–3 oder 4–5–6.'};
+ return {name:'ZAHLENWURF',desc,detail:'Kein Schock, General oder Straße.'};
 }
-function diceSixAllowance(){
- const sixes=diceValues.filter(v=>v===6).length;
- // Drei Sechsen müssen im selben Wurf gefallen sein, nicht über mehrere Würfe gesammelt.
- return sixes===3&&diceLastFreshSixes===3?2:sixes>=2?1:0;
-}
-function updateDice(){
- const tray=document.querySelector('#diceTray');if(!tray)return;
- const result=document.querySelector('#diceResult'),sixRule=document.querySelector('#sixRule');
- tray.style.display=diceFinished?'none':'';sixRule.style.display=diceFinished?'none':'';
- result.classList.toggle('in-tray',diceFinished);
- tray.innerHTML=diceValues.map((v,i)=>{
-  const covered=diceCovered&&!diceHeld[i],hidden=diceRolls===0||covered;
-  return `<button type="button" class="die-button ${diceHeld[i]?'held':''} ${hidden?'covered':''}" data-die="${i}" aria-pressed="${diceHeld[i]}" aria-label="Würfel ${i+1}: ${hidden?'verdeckt':v}${diceHeld[i]?', festgehalten':''}" ${hidden||diceFinished?'disabled':''}><span class="die-face">${hidden?'':dicePips(v)}</span><span class="hold-label">${hidden?(diceRolls===0?'UNTER DEM BECHER':'VERDECKT'):diceHeld[i]?'● FESTGEHALTEN':'○ ANTIPPEN ZUM HALTEN'}</span></button>`
- }).join('');
- tray.querySelectorAll('[data-die]').forEach(b=>b.onclick=()=>{if(diceCovered||diceFinished||diceRolls===0)return;const i=Number(b.dataset.die);diceHeld[i]=!diceHeld[i];updateDice()});
- document.querySelector('#rollCount').textContent=`WURF ${diceRolls} / 3`;
- const roll=document.querySelector('#rollDice'),finish=document.querySelector('#finishDice'),label=document.querySelector('#cupLabel');
- const available=Math.max(0,diceSixTurnLimit-diceSixTurns);
- sixRule.innerHTML=!diceCovered&&!diceFinished&&diceRolls>0&&available&&diceValues.includes(6)?`<button type="button" id="turnSix" class="ghost">↻ SECHS ZU EINS DREHEN (${available}×)</button><span class="micro">HAUSREGEL: ${diceSixTurnLimit===2?'3 SECHSEN IN EINEM WURF':'2 SECHSEN'}</span>`:'';
- const turnBtn=document.querySelector('#turnSix');if(turnBtn)turnBtn.onclick=()=>{const i=diceValues.indexOf(6);if(i<0)return;diceValues[i]=1;diceSixTurns++;diceHeld[i]=true;updateDice()};
- roll.disabled=diceFinished||(!diceCovered&&(diceRolls>=3||diceHeld.every(Boolean)));
- roll.textContent=diceFinished?'RUNDE BEENDET':diceCovered?'◉ BECHER AUFDECKEN':diceRolls===0?'▣ BECHER SCHÜTTELN':'▣ ERNEUT SCHÜTTELN';
- finish.disabled=diceFinished||diceCovered||diceRolls===0;
- label.textContent=diceFinished?'✳ DEIN ENDWURF':diceCovered?'▣ BECHER STEHT — JETZT AUFDECKEN':diceRolls===0?'▣ DER BECHER IST BEREIT':'◉ WÜRFEL ANTIPPPEN ZUM FESTHALTEN';
- result.className='game-result'+(diceFinished?' final':' waiting');
- if(diceFinished){const o=diceOutcome();result.innerHTML=`<div class="final-eyebrow">✳ DEIN ERGEBNIS / ${diceRolls} ${diceRolls===1?'WURF':'WÜRFE'}</div><div class="final-name">${o.name}</div><div class="final-dice">${o.desc}</div><div class="final-description">${o.detail}</div>`}
- else if(diceCovered)result.textContent='Die Würfel liegen verdeckt. Heb den Becher, um deinen Wurf zu sehen.';
- else if(diceRolls===0)result.textContent='Schüttel den Becher, um deinen ersten Wurf zu starten.';
- else if(diceRolls===3)result.textContent='Dritter Wurf aufgedeckt. Werte jetzt dein Ergebnis.';
- else result.textContent='Würfel aufgedeckt! Tippe Würfel an, die du behalten möchtest, oder schüttel erneut.';
+function updateDice(board,p){
+ const el=r=>board.querySelector(`[data-role="${r}"]`),tray=el('diceTray'),result=el('diceResult'),sixRule=el('sixRule');
+ tray.style.display=p.finished?'none':'';sixRule.style.display=p.finished?'none':'';
+ tray.innerHTML=p.values.map((v,i)=>{const hidden=p.rolls===0||(p.covered&&!p.held[i]);return `<button type="button" class="die-button ${p.held[i]?'held':''} ${hidden?'covered':''}" data-die="${i}" aria-pressed="${p.held[i]}" aria-label="Würfel ${i+1}: ${hidden?'verdeckt':v}" ${hidden||p.finished?'disabled':''}><span class="die-face">${hidden?'':dicePips(v)}</span><span class="hold-label">${hidden?'VERDECKT':p.held[i]?'● FESTGEHALTEN':'○ HALTEN'}</span></button>`}).join('');
+ tray.querySelectorAll('[data-die]').forEach(b=>b.onclick=()=>{if(p.covered||p.finished||p.rolls===0)return;const i=Number(b.dataset.die);p.held[i]=!p.held[i];updateDice(board,p)});
+ el('rollCount').textContent=`WURF ${p.rolls} / 3`;
+ const available=Math.max(0,p.sixLimit-p.sixTurns);
+ sixRule.innerHTML=!p.covered&&!p.finished&&p.rolls>0&&available&&p.values.includes(6)?`<button type="button" class="ghost" data-turn-six>↻ 6 ZU 1 DREHEN (${available}×)</button>`:'';
+ sixRule.querySelector('[data-turn-six]')?.addEventListener('click',()=>{const i=p.values.indexOf(6);if(i<0)return;p.values[i]=1;p.sixTurns++;p.held[i]=true;updateDice(board,p)});
+ const roll=el('rollDice');roll.disabled=p.finished||(!p.covered&&(p.rolls>=3||p.held.every(Boolean)));
+ roll.textContent=p.finished?'RUNDE BEENDET':p.covered?'◉ BECHER AUFDECKEN':p.rolls===0?'▣ BECHER SCHÜTTELN':'▣ ERNEUT SCHÜTTELN';
+ el('finishDice').disabled=p.finished||p.covered||p.rolls===0;
+ el('cupLabel').textContent=p.finished?'✳ DEIN ENDWURF':p.covered?'▣ BECHER STEHT — AUFDECKEN':p.rolls===0?'▣ DER BECHER IST BEREIT':'◉ WÜRFEL ANTIPPPEN ZUM HALTEN';
+ result.className='game-result'+(p.finished?' final in-tray':' waiting');
+ if(p.finished){const o=diceOutcome(p.values);result.innerHTML=`<div class="final-eyebrow">✳ DEIN ERGEBNIS / ${p.rolls} ${p.rolls===1?'WURF':'WÜRFE'}</div><div class="final-name">${o.name}</div><div class="final-dice">${o.desc}</div><div class="final-description">${o.detail}</div>`}
+ else result.textContent=p.covered?'Die Würfel liegen verdeckt. Heb den Becher.':p.rolls===0?'Schüttel den Becher für den ersten Wurf.':p.rolls===3?'Dritter Wurf aufgedeckt. Werte dein Ergebnis.':'Würfel aufgedeckt! Halte Würfel fest oder schüttel erneut.';
 }
 function wireDice(){
- document.querySelector('#rollDice').onclick=()=>{
-  if(diceFinished)return;
-  if(diceCovered){diceCovered=false;diceSixTurns=0;diceSixTurnLimit=diceSixAllowance();updateDice();return}
-  if(diceRolls>=3||diceHeld.every(Boolean))return;
-  const fresh=diceValues.map((v,i)=>diceHeld[i]?null:crypto.getRandomValues(new Uint32Array(1))[0]%6+1);
-  diceLastFreshSixes=fresh.filter(v=>v===6).length;
-  diceValues=fresh.map((v,i)=>v===null?diceValues[i]:v);
-  diceRolls++;diceCovered=true;updateDice();
- };
- document.querySelector('#finishDice').onclick=()=>{if(diceRolls===0||diceCovered||diceFinished)return;diceFinished=true;updateDice()};
- document.querySelector('#resetDice').onclick=()=>{diceValues=[1,1,1];diceHeld=[false,false,false];diceRolls=0;diceCovered=false;diceFinished=false;diceSixTurns=0;diceSixTurnLimit=0;diceLastFreshSixes=0;updateDice()};
- updateDice();
+ document.querySelectorAll('[data-dice-mode]').forEach(b=>b.onclick=()=>{diceMode=b.dataset.diceMode;render()});
+ document.querySelectorAll('.player-board').forEach((board,i)=>{
+  const p=dicePlayers[i],el=r=>board.querySelector(`[data-role="${r}"]`);
+  el('rollDice').onclick=()=>{
+   if(p.finished)return;
+   if(p.covered){p.covered=false;p.sixTurns=0;const sixes=p.values.filter(v=>v===6).length;p.sixLimit=sixes===3&&p.lastFreshSixes===3?2:sixes>=2?1:0;updateDice(board,p);return}
+   if(p.rolls>=3||p.held.every(Boolean))return;
+   const fresh=p.values.map((v,j)=>p.held[j]?null:crypto.getRandomValues(new Uint32Array(1))[0]%6+1);
+   p.lastFreshSixes=fresh.filter(v=>v===6).length;p.values=fresh.map((v,j)=>v===null?p.values[j]:v);p.rolls++;p.covered=true;updateDice(board,p);
+  };
+  el('finishDice').onclick=()=>{if(p.rolls===0||p.covered||p.finished)return;p.finished=true;updateDice(board,p)};
+  el('resetDice').onclick=()=>{Object.assign(p,makeDicePlayer());updateDice(board,p)};
+  updateDice(board,p);
+ });
 }
 function loginHTML(){return `<section class="login-panel"><h2>✳ ADMIN LOGIN</h2><p class="note">Nur für den Betreiber dieser Sandbox. Besucher können alle veröffentlichten Einträge ansehen.</p><form id="loginForm"><label>E-Mail<input name="email" type="email" required autocomplete="username"></label><label>Passwort<input name="password" type="password" required autocomplete="current-password"></label><button class="action" type="submit">ANMELDEN ↗</button><p class="statusline" id="loginStatus"></p></form></section>`}
 function wireLogin(){$('#loginForm').onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,b=f.querySelector('button');b.disabled=true;$('#loginStatus').textContent='Anmeldung läuft …';const {error}=await db.auth.signInWithPassword({email:f.elements.email.value.trim(),password:f.elements.password.value});if(error){$('#loginStatus').textContent='Anmeldung fehlgeschlagen: '+error.message;b.disabled=false;return}await checkAdmin();if(!loggedIn){await db.auth.signOut();$('#loginStatus').textContent='Dieser Account ist nicht als Admin freigeschaltet.';b.disabled=false;return}admin=true;updateToggle();await loadItems();flash('Als Admin angemeldet!')}}
